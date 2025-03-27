@@ -1,8 +1,10 @@
+require('dotenv').config()
 const path = require("node:path");
 const { Pool } = require("pg");
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
+const indexRouter = require("./routes/indexRouter");
 const LocalStrategy = require('passport-local').Strategy;
 const PORT = process.env.PORT;
 const DB_PASSWORD = process.env.DB_PASSWORD;
@@ -21,6 +23,9 @@ const pool = new Pool({
   
 
 const app = express();
+
+
+app.use("/", indexRouter);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -29,22 +34,6 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 
-app.get("/", (req, res) => res.render("index"));
-app.get("/signup", (req, res) => res.render("signup"));
 
-app.post("/signup", async (req, res, next) => {
-    try {
-      await pool.query("INSERT INTO users (firstname, lastname, username,email,password) VALUES ($1, $2, $3, $4, $5)", [
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        req.body.username,
-        req.body.password,
-      ]);
-      res.redirect("/");
-    } catch(err) {
-      return next(err);
-    }
-  });
 
 app.listen(PORT, () => console.log(`app listening on port ! ${PORT}`));
