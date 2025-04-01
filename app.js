@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 require('dotenv').config()
 const path = require("node:path");
 const express = require("express");
@@ -22,14 +23,13 @@ app.use(express.urlencoded({ extended: false }));
 
 app.post("/signup", async (req, res, next) => {
   try {
-    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
       req.body.firstname,
       req.body.lastname,
-      req.body.username,
       req.body.email,
-      req.body.password,
     ]);
-    res.redirect("/");
+    res.redirect("/login");
   } catch(err) {
     return next(err);
   }
@@ -75,4 +75,12 @@ app.post(
   })
 );
 
+app.get("/logout", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
 app.listen(PORT, () => console.log(`app listening on port ! ${PORT}`));
