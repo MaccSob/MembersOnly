@@ -3,4 +3,4 @@
 
 Another blog-like site. 
 
-NodeJS/EJS, PostreSQL,Express.
+NodeJS/EJS, PostreSQL,Express,PassportJS.
