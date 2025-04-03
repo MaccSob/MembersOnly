@@ -12,7 +12,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 
-app.use("/", indexRouter);
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -21,19 +21,7 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 
-app.post("/signup", async (req, res, next) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 12);
-    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
-      req.body.firstname,
-      req.body.lastname,
-      req.body.email,
-    ]);
-    res.redirect("/login");
-  } catch(err) {
-    return next(err);
-  }
-});
+
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
@@ -44,8 +32,10 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      if (user.password !== password) {
-        return done(null, false, { message: "Incorrect password" });
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        // passwords do not match!
+        return done(null, false, { message: "Incorrect password" })
       }
       return done(null, user);
     } catch(err) {
@@ -67,6 +57,25 @@ passport.deserializeUser(async (id, done) => {
   }
 })
 
+app.post("/signup", async (req, res, next) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
+      req.body.firstname,
+      req.body.lastname,
+      req.body.email,
+    ]);
+    res.redirect("/login");
+  } catch(err) {
+    return next(err);
+  }
+});
+app.get("/signup", (req, res) => res.render("signup"));
+app.get("/login", (req, res) => res.render("login"));
+
+app.get("/", (req, res) => {
+  res.render("index", { user: req.user });
+});
 app.post(
   "/login",
   passport.authenticate("local", {

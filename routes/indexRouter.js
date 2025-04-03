@@ -8,5 +8,8 @@ const indexRouter = Router();;
 
 indexRouter.get("/signup", (req, res) => res.render("signup"));
 indexRouter.get("/login", (req, res) => res.render("login"));
+app.get("/", (req, res) => {
+  res.render("index", { user: req.user });
+});
 
   module.exports = indexRouter;
