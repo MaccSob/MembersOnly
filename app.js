@@ -70,12 +70,9 @@ app.post("/signup", async (req, res, next) => {
     return next(err);
   }
 });
-app.get("/signup", (req, res) => res.render("signup"));
-app.get("/login", (req, res) => res.render("login"));
+app.use("/", indexRouter);
 
-app.get("/", (req, res) => {
-  res.render("index", { user: req.user });
-});
+
 app.post(
   "/login",
   passport.authenticate("local", {
