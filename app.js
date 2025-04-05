@@ -60,7 +60,7 @@ passport.deserializeUser(async (id, done) => {
 app.post("/signup", async (req, res, next) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
-    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
+    await pool.query("INSERT INTO users (firstname, lastname, username, email, password, memberstatus) VALUES ($1, $2, $3, $4, $5,true)", [req.body.username, hashedPassword,
       req.body.firstname,
       req.body.lastname,
       req.body.email,
