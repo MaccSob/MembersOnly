@@ -11,24 +11,6 @@ const PORT = process.env.PORT;
 
 const app = express();
 
-const messages = [
-  {
-    text: "Test1341!",
-    user: "Juno",
-    added: new Date()
-  },
-  {
-    text: "Test1222!",
-    user: "Andy",
-    added: new Date()
-  },
-  {
-  text: "Test1!",
-  user: "Brad",
-  added: new Date()
-  } 
-];
-
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -37,31 +19,11 @@ app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-  res.render("index",{ title: "Tests", messages: messages });
-});
-
-
-
-indexRouter.post("/new", function(req, res ) {
-  const data = req.body;
-
-  console.log("Text: ", data.messageText);
-  console.log("User: ", data.messageUser);
-  console.log("Date: ", new Date());
-
-  messages.push({ text: req.body.messageText, user: req.body.messageUser, added: new Date() });
 
 
 
 
 
-
-  res.redirect("/")
-});
-
-
-module.exports = indexRouter;
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
