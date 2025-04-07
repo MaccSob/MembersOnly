@@ -9,11 +9,31 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require("./db/pool");
 const PORT = process.env.PORT;
 
+
+const messages = [
+  {
+    user: "Juno",
+    text: "Why?",
+    added: new Date()
+  },
+  {
+    user: "Andy",
+    text: "Hey guys!!",
+    added: new Date()
+  },
+  {
+    user: "Brad",
+  text: "Im going ya",
+  added: new Date()
+  } 
+];
+
 const app = express();
 
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(express.static(__dirname + '/public'));
 
 app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
 app.use(passport.session());

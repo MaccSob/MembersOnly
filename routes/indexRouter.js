@@ -7,18 +7,18 @@ const indexRouter = Router();
 
 const messages = [
   {
-    text: "Test1341!",
     user: "Juno",
+    text: "Why?",
     added: new Date()
   },
   {
-    text: "Test1222!",
     user: "Andy",
+    text: "Hey guys!!",
     added: new Date()
   },
   {
-  text: "Test1!",
-  user: "Brad",
+    user: "Brad",
+  text: "Im going ya",
   added: new Date()
   } 
 ];
@@ -35,11 +35,12 @@ indexRouter.get('/', (req, res) => {
 indexRouter.post("/new", function(req, res ) {
   const data = req.body;
 
-  console.log("Text: ", data.messageText);
+
   console.log("User: ", data.messageUser);
+  console.log("Text: ", data.messageText);
   console.log("Date: ", new Date());
 
-  messages.push({ text: req.body.messageText, user: req.body.messageUser, added: new Date() });
+  messages.push({user: req.body.messageUser, text: req.body.messageText, added: new Date() });
 
 
 
