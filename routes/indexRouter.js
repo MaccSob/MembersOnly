@@ -4,7 +4,23 @@ const app = express();
 const { Router } = require("express");
 const indexRouter = Router();
 
-
+const messages = [
+  {
+    user: "Juno",
+    text: "Why?",
+    added: new Date()
+  },
+  {
+    user: "Andy",
+    text: "Hey guys!!",
+    added: new Date()
+  },
+  {
+    user: "Brad",
+  text: "Im going ya",
+  added: new Date()
+  } 
+];
 
 indexRouter.get("/signup", (req, res) => res.render("signup"));
 indexRouter.get("/login", (req, res) => res.render("login"));
@@ -25,25 +41,8 @@ indexRouter.post("/new", function(req, res ) {
   messages.push({user: req.body.messageUser, text: req.body.messageText, added: new Date() });
 
 
-
-
-
-
   res.redirect("/")
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
