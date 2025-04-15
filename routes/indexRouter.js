@@ -27,7 +27,8 @@ indexRouter.get("/login", (req, res) => res.render("login"));
 indexRouter.get("/new", (req, res) => res.render("new"));
 indexRouter.get("/secretSite", (req, res) => res.render("secretSite"));
 indexRouter.get('/', (req, res) => {
-  res.render("index", { title: "Testtt", messages: messages, user: req.user })
+  res.render("index", { title: "Testtt", messages: messages, user: req.user }
+  )
 });
 
 indexRouter.post("/new", function(req, res ) {
@@ -43,7 +44,6 @@ indexRouter.post("/new", function(req, res ) {
 
   res.redirect("/")
 });
-
 
 
   module.exports = indexRouter;
