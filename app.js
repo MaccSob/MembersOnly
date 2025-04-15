@@ -21,6 +21,7 @@ const app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + '/public'));
+app.use(express.urlencoded({ extended: false }));
 
 
 app.use(session({
@@ -36,25 +37,6 @@ app.use(session({
 }));
 
 
-app.use(express.urlencoded({ extended: false }));
-
-
-
-
-
-app.post("/signup", async (req, res, next) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 12);
-    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
-      req.body.firstname,
-      req.body.lastname,
-      req.body.email,
-    ]);
-    res.redirect("/login");
-  } catch(err) {
-    return next(err);
-  }
-});
 app.use("/", indexRouter);
 
 

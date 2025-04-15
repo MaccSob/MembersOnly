@@ -3,6 +3,10 @@ const path = require("node:path");
 const app = express();
 const { Router } = require("express");
 const indexRouter = Router();
+const bcrypt = require("bcryptjs");
+const pool = require("../db/pool");
+const { Pool } = require("pg");
+
 
 const messages = [
   {
@@ -44,6 +48,21 @@ indexRouter.post("/new", function(req, res ) {
 
   res.redirect("/")
 });
+indexRouter.post("/signup", async (req, res, next) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
+      req.body.firstname,
+      req.body.lastname,
+      req.body.email,
+    ]);
+    res.redirect("/login");
+  } catch(err) {
+    return next(err);
+  }
+});
+app.use("/", indexRouter);
+
 
 
   module.exports = indexRouter;
