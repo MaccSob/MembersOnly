@@ -15,20 +15,6 @@ input:hover {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.94);
     border: 1px solid rgb(102, 79, 83);
 }
-h1 {
+h3 {
     margin: 12px 12px;
-}
-button {
-    padding: 6px;
-    background-color: #fff;
-    transition: transform 0.5s ease;
-    border-radius: 8px;
-}
-button:hover {
-    transform: translateY(-5px);
-    color: black;
-}
-ul {
-    list-style: none;
-    text-decoration: none;
 }
