@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 require('dotenv').config()
+// login problem chuj nie dziala
 const path = require("node:path");
 const express = require("express");
 const session = require("express-session");
@@ -14,7 +15,6 @@ const PORT = process.env.PORT;
 
 
 
-
 const app = express();
 
 
@@ -22,7 +22,6 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: false }));
-
 
 app.use(session({
   store: new pgSession({
@@ -35,6 +34,9 @@ app.use(session({
   resave: false,
   cookie: { maxAge: 1000 * 60 } // 30 Days
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 app.use("/", indexRouter);

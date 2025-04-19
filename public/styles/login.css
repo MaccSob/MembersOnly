@@ -11,9 +11,18 @@ form>input {
     margin: 8px 0;
     padding: 3px;
 }
+label {
+    font-size: 18px;
+    font-weight: 440;
+}
+button {
+    padding: 6px;
+    background-color: #fff;
+    transition: transform 0.5s ease;
+    border-radius: 8px;
+}
 input:hover {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.94);
-    border: 1px solid rgb(102, 79, 83);
 }
 h3 {
     margin: 12px 12px;
