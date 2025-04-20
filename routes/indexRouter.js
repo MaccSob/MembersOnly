@@ -8,7 +8,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const passport = require("passport");
 const { Pool } = require("pg");
 const pool = require("../db/pool");
-require('../config/passport')(passport);
 
 const messages = [
   {
@@ -63,7 +62,5 @@ indexRouter.post("/signup", async (req, res, next) => {
     return next(err);
   }
 });
-indexRouter.post('/login', passport.authenticate('local'), (req,res, next) => {});
-
 
   module.exports = indexRouter;
