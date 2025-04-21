@@ -27,6 +27,8 @@ const messages = [
   } 
 ];
 
+ // --------------------------------- GET ROUTES -------------------------
+
 indexRouter.get("/signup", (req, res) => res.render("signup"));
 indexRouter.get("/login", (req, res) => res.render("login"));
 indexRouter.get("/new", (req, res) => res.render("new"));
@@ -35,6 +37,35 @@ indexRouter.get('/', (req, res) => {
   res.render("index", { title: "Testtt", messages: messages, user: req.user }
   )
 });
+
+// ----------------------------------- POST ROUTES --------------------------
+
+indexRouter.post("/signup", async (req, res, next) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
+      req.body.firstname,
+      req.body.lastname,
+      req.body.email,
+    ]);
+    res.redirect("/login");
+  } catch(err) {
+    return next(err);
+  }
+});
+
+app.post(
+  '/signup',
+  body('password').isLength({ min: 5 }),
+  body('passwordConfirmation').custom((value, { req }) => {
+    return value === req.body.password;
+  }),
+  (req, res) => {
+    res.redirect('/signup')
+  },
+);
+
+
 
 indexRouter.post("/new", function(req, res ) {
   const data = req.body;
@@ -49,18 +80,6 @@ indexRouter.post("/new", function(req, res ) {
 
   res.redirect("/")
 });
-indexRouter.post("/signup", async (req, res, next) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 12);
-    await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
-      req.body.firstname,
-      req.body.lastname,
-      req.body.email,
-    ]);
-    res.redirect("/login");
-  } catch(err) {
-    return next(err);
-  }
-});
+
 
   module.exports = indexRouter;
