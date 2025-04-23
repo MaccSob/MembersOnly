@@ -8,6 +8,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const passport = require("passport");
 const { Pool } = require("pg");
 const pool = require("../db/pool");
+const { body } = require("express-validator");
 
 const messages = [
   {
@@ -40,7 +41,11 @@ indexRouter.get('/', (req, res) => {
 
 // ----------------------------------- POST ROUTES --------------------------
 
-indexRouter.post("/signup", async (req, res, next) => {
+indexRouter.post("/signup", body('firstname').isLength({ min: 2 }),
+body('lastname').isLength({min: 2}),
+body('username').isEmail(),
+body('password').isLength({ min: 5 }),
+  async (req, res, next) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
     await pool.query("INSERT INTO users (firstname, lastname, username, email, password) VALUES ($1, $2, $3, $4, $5)", [req.body.username, hashedPassword,
@@ -54,16 +59,6 @@ indexRouter.post("/signup", async (req, res, next) => {
   }
 });
 
-app.post(
-  '/signup',
-  body('password').isLength({ min: 5 }),
-  body('passwordConfirmation').custom((value, { req }) => {
-    return value === req.body.password;
-  }),
-  (req, res) => {
-    res.redirect('/signup')
-  },
-);
 
 
 

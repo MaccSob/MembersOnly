@@ -1,13 +1,11 @@
 const bcrypt = require("bcryptjs");
 require('dotenv').config()
-// login problem chuj nie dziala
 const path = require("node:path");
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const pgSession = require('connect-pg-simple')(session);
 const indexRouter = require("./routes/indexRouter");
-const LocalStrategy = require('passport-local').Strategy;
 const pool = require("./db/pool");
 const pgPool = require("./db/pool");
 const { Pool } = require("pg");
@@ -35,7 +33,6 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 } // 30 Days
 }));
 
-app.use(passport.initialize());
 app.use(passport.session());
 
 
